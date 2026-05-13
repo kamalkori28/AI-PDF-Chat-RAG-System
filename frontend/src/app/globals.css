@@ -1,0 +1,194 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f7f9fb;
+  --surface: #ffffff;
+  --surface-strong: #eef3f8;
+  --text: #172033;
+  --muted: #64748b;
+  --border: #d9e2ec;
+  --primary: #2563eb;
+  --primary-strong: #1d4ed8;
+  --accent: #0f766e;
+  --warning: #b45309;
+  --danger: #dc2626;
+  --shadow: 0 14px 40px rgba(15, 23, 42, 0.08);
+}
+
+.dark {
+  --background: #0b1020;
+  --surface: #111827;
+  --surface-strong: #182235;
+  --text: #e5e7eb;
+  --muted: #94a3b8;
+  --border: #263449;
+  --primary: #60a5fa;
+  --primary-strong: #93c5fd;
+  --accent: #5eead4;
+  --warning: #fbbf24;
+  --danger: #f87171;
+  --shadow: 0 16px 44px rgba(0, 0, 0, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--background);
+  color: var(--text);
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background:
+    linear-gradient(135deg, rgba(37, 99, 235, 0.08), transparent 28%),
+    linear-gradient(315deg, rgba(15, 118, 110, 0.09), transparent 30%),
+    var(--background);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.panel {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+  box-shadow: var(--shadow);
+}
+
+.soft-panel {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-strong);
+}
+
+.input {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  outline: none;
+  padding: 0.75rem 0.85rem;
+}
+
+.input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 18%, transparent);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.5rem;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 0.55rem 0.85rem;
+  font-weight: 700;
+  transition:
+    background 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease,
+    transform 150ms ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--primary-strong);
+}
+
+.btn-secondary {
+  border-color: var(--border);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text);
+}
+
+.btn-danger {
+  border-color: color-mix(in srgb, var(--danger) 35%, var(--border));
+  background: color-mix(in srgb, var(--danger) 10%, var(--surface));
+  color: var(--danger);
+}
+
+.icon-btn {
+  display: inline-flex;
+  width: 2.5rem;
+  height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.markdown {
+  line-height: 1.65;
+}
+
+.markdown p {
+  margin: 0.35rem 0;
+}
+
+.markdown ul,
+.markdown ol {
+  margin: 0.5rem 0;
+  padding-left: 1.2rem;
+}
+
+.markdown code {
+  border-radius: 6px;
+  background: var(--surface-strong);
+  padding: 0.1rem 0.3rem;
+}
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--surface-strong);
+}
+
+.skeleton::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.24), transparent);
+  animation: shimmer 1.2s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+

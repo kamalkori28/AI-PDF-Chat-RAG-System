@@ -1,0 +1,66 @@
+services:
+  db:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: rag_assistant
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d rag_assistant"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  backend:
+    image: ${BACKEND_IMAGE:-enterprise-rag-backend:latest}
+    build:
+      context: ../../backend
+    environment:
+      APP_ENV: production
+      DEBUG: "false"
+      DATABASE_URL: postgresql+asyncpg://postgres:${POSTGRES_PASSWORD}@db:5432/rag_assistant
+      SECRET_KEY: ${SECRET_KEY}
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      OLLAMA_CHAT_MODEL: ${OLLAMA_CHAT_MODEL:-llama3}
+      OLLAMA_EMBEDDING_MODEL: ${OLLAMA_EMBEDDING_MODEL:-nomic-embed-text}
+      OLLAMA_REQUEST_TIMEOUT_SECONDS: ${OLLAMA_REQUEST_TIMEOUT_SECONDS:-30}
+      OLLAMA_NUM_CTX: ${OLLAMA_NUM_CTX:-4096}
+      OLLAMA_KEEP_ALIVE: ${OLLAMA_KEEP_ALIVE:-10m}
+      CHROMA_COLLECTION_NAME: ${CHROMA_COLLECTION_NAME:-enterprise_pdf_chunks_ollama}
+      BACKEND_CORS_ORIGINS: ${BACKEND_CORS_ORIGINS}
+      CHROMA_PERSIST_DIR: /app/storage/chroma
+      UPLOAD_DIR: /app/storage/uploads
+      CHUNK_STRATEGY: recursive
+      CHUNK_SIZE: 900
+      CHUNK_OVERLAP: 120
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    volumes:
+      - backend_storage:/app/storage
+    restart: unless-stopped
+
+  frontend:
+    image: ${FRONTEND_IMAGE:-enterprise-rag-frontend:latest}
+    build:
+      context: ../../frontend
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+    environment:
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  backend_storage:
