@@ -121,7 +121,7 @@ into one modern production-ready AI application.
 
 ---
 
-# 📸 Screenshots
+<!-- # 📸 Screenshots
 
 ## 🖥️ Main Dashboard
 
@@ -145,7 +145,7 @@ into one modern production-ready AI application.
 
 <img src="./docs/screenshots/darkmode.png" width="100%" />
 
----
+--- -->
 
 # 🏗️ System Architecture
 
